@@ -28,3 +28,4 @@ mlflow
 requests==2.31.0
 dotenv
 joblib
+dotenv

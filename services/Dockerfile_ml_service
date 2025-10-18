@@ -1,0 +1,12 @@
+FROM python:3.11-slim
+LABEL author=${LABEL}
+
+
+COPY . ./ml_service
+WORKDIR ml_service 
+
+RUN pip3 install -r requirements.txt
+
+EXPOSE ${MAIN_APP_DOCKER_PORT}
+
+CMD uvicorn ml_service.cost_estimate_app:app --reload --port ${MAIN_APP_DOCKER_PORT} --host 0.0.0.0

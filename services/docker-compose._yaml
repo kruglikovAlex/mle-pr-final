@@ -1,0 +1,38 @@
+services:
+  1-mlflow-web:
+    env_file:
+      - ./.env
+    build:
+      dockerfile: Dockerfile_mlflow_server
+    ports:
+      - "${MLFLOW_APP_PORT_VM}:${MLFLOW_APP_DOCKER_PORT}"
+    hostname: mlflow
+    #environment:
+    #  - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+    #  - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+    #  - MLFLOW_S3_ENDPOINT_URL=https://storage.yandexcloud.net
+    #  - AWS_BUCKET_NAME=${S3_BUCKET_NAME}
+    #hostname: mlflow_app
+    #  - mlflow
+    entrypoint: mlflow server --registry-store-uri postgresql://${DB_DESTINATION_USER}:${DB_DESTINATION_PASSWORD}@${DB_DESTINATION_HOST}:${DB_DESTINATION_PORT}/${DB_DESTINATION_NAME} --backend-store-uri postgresql://${DB_DESTINATION_USER}:${DB_DESTINATION_PASSWORD}@${DB_DESTINATION_HOST}:${DB_DESTINATION_PORT}/${DB_DESTINATION_NAME} --default-artifact-root s3://$S3_BUCKET_NAME --no-serve-artifacts 
+
+  2-ml-app:  
+    env_file:
+      - ./.env
+    build:
+      dockerfile: Dockerfile_ml_service
+    ports:
+      - "${MAIN_APP_PORT_VM}:${MAIN_APP_DOCKER_PORT}"
+    depends_on:
+      - 1-mlflow-web
+    #hostname: fastapi_app
+    #
+    # указываем тома
+    #volumes:
+    #    # тип тома 
+    #  - type: bind
+    #    # директория на ВМ
+    #    source: ./speeches
+    #    # директория в контейнере
+    #    target: /app_with_counter/speeches
+        #
