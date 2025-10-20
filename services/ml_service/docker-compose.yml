@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  features:
+    build: .
+    command: uvicorn features_service:app --reload --port 8081 --host 0.0.0.0
+    ports:
+      - "8081:8081"
+
+  events:
+    build: .
+    command: uvicorn events_service:app --reload --port 8082 --host 0.0.0.0
+    ports:
+      - "8082:8082"
+
+  recommendation:
+    build: .
+    command: uvicorn recommendation_service:app --reload --port 8088 --host 0.0.0.0
+    ports:
+      - "8088:8088"

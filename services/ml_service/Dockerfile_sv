@@ -1,0 +1,14 @@
+FROM python:3.11-slim
+LABEL author=${LABEL}
+
+COPY . ./ml_service
+WORKDIR ml_service
+
+RUN pip3 install -r requirements.txt \
+    && pip3 install supervisor
+
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+EXPOSE 8081 8082 8088
+
+CMD ["/usr/local/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
